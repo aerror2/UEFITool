@@ -1071,7 +1071,7 @@ USTATUS FfsParser::parseVolumeHeader(const UByteArray & volume, const UINT32 loc
 
     // Check for FFS v2 volume
     UByteArray guid = UByteArray((const char*)&volumeHeader->FileSystemGuid, sizeof(EFI_GUID));
-    if (std::find(FFSv2Volumes.begin(), FFSv2Volumes.end(), guid) != FFSv2Volumes.end()) {
+    if (guid ==EFI_HP_FILE_X_GUID || std::find(FFSv2Volumes.begin(), FFSv2Volumes.end(), guid) != FFSv2Volumes.end()) {
         isUnknown = false;
         ffsVersion = 2;
     }
@@ -1081,7 +1081,7 @@ USTATUS FfsParser::parseVolumeHeader(const UByteArray & volume, const UINT32 loc
         ffsVersion = 3;
     }
     // Check for VSS NVRAM volume
-    else if (guid == NVRAM_MAIN_STORE_VOLUME_GUID || guid == NVRAM_ADDITIONAL_STORE_VOLUME_GUID) {
+    else if (guid == NVRAM_MAIN_STORE_VOLUME_GUID || guid == NVRAM_ADDITIONAL_STORE_VOLUME_GUID ) {
         isUnknown = false;
         isNvramVolume = true;
     }
