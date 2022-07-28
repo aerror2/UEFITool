@@ -923,6 +923,12 @@ USTATUS FfsParser::parseRawArea(const UModelIndex & index)
         // Parse current volume's header
         if (itemType == Types::Volume) {
             UModelIndex volumeIndex;
+            
+            if(itemSize!=itemAltSize)
+            {
+                itemSize = itemAltSize;
+            }
+            
             UByteArray volume = data.mid(itemOffset, itemSize);
             result = parseVolumeHeader(volume, headerSize + itemOffset, index, volumeIndex);
             if (result) {
@@ -1071,7 +1077,7 @@ USTATUS FfsParser::parseVolumeHeader(const UByteArray & volume, const UINT32 loc
 
     // Check for FFS v2 volume
     UByteArray guid = UByteArray((const char*)&volumeHeader->FileSystemGuid, sizeof(EFI_GUID));
-    if (guid ==EFI_HP_FILE_X_GUID || std::find(FFSv2Volumes.begin(), FFSv2Volumes.end(), guid) != FFSv2Volumes.end()) {
+    if ( std::find(FFSv2Volumes.begin(), FFSv2Volumes.end(), guid) != FFSv2Volumes.end()) {
         isUnknown = false;
         ffsVersion = 2;
     }
